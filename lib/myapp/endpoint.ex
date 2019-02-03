@@ -1,7 +1,9 @@
 defmodule Myapp.Endpoint do
   use Phoenix.Endpoint, otp_app: :myapp
 
-  socket "/socket", Myapp.UserSocket
+  socket "/socket", Myapp.UserSocket,
+    websocket: true,
+    longpoll: false
 
   # Serve at "/" the static files from "priv/static" directory.
   #
