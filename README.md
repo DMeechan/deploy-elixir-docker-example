@@ -1,23 +1,29 @@
-# Myapp--a working phoenix build & deploy example
-This is meant to be a complete example of using [Phoenix](http://www.phoenixframework.org) + [Docker](https://www.docker.com) + [Edeliver](https://github.com/boldpoker/edeliver) + [Distillery](https://github.com/bitwalker/distillery) to manage releases.  This approach uses MacOS for development, uses Ubuntu 16.04 in a docker container for building releases and deployment to a Ubuntu 16.04 Production host.
+# Myapp - a working Phoenix build & deploy example
 
-Basic steps
--Develop locally on a Mac
--Use edeliver + distillery to build a release inside a docker image (this docker image should be as close a match as possible to your production deployemnt OS 
--Use edeliver to deploy to production
--Note: wherever you see myapp.com, you shoudl replace whtat with your production hostname or IP address
+This is meant to be a complete example of using [Phoenix](http://www.phoenixframework.org) + [Docker](https://www.docker.com) + [Edeliver](https://github.com/boldpoker/edeliver) + [Distillery](https://github.com/bitwalker/distillery) to manage releases.
+
+This approach uses MacOS for development, uses Ubuntu 18.04 in a docker container for building releases and deployment to a Ubuntu 18.04 Production host.
+
+## Basic steps:
+
+1. Develop locally on a Mac
+2. Use eDeliver + distillery to build a release inside a docker image (this docker image should be as close a match as possible to your production deployemnt OS 
+3. Use eDeliver to deploy to production
+ 
+*Note: replace myapp.com (in this project) with your production hostname or IP address*
 
 ## Step By Step
+
 1. Perform Dev Mac Config Setup and Production Server Setup (see sections below)
 	* Install and start postgres.app and docker on the Mac dev machine
 	* Install Phoenix & elixir on the Mac dev machine
 	* Create user and install postgresql, nginx on the Production Host Server
 	* Create the database and nginx config to proxy (e.g. external port 80/443 to port 4000 on localhost) on the Production Host Server
 	* Setup [public key authentication for ssh](https://help.ubuntu.com/community/SSH/OpenSSH/Keys) on the Production Host Server
-2. clone this repo
+2. Clone this repo
 
-	```
-	git clone https://github.com/appdojolabs/myapp.git
+	```bash
+	git clone https://github.com/DMeechan/deploy-elixir-docker-example.git
 	```
 3. Enter the app project directory `cd myapp`
 4. setup npm: `npm install`
@@ -52,14 +58,15 @@ Basic steps
 	```
 	cp ~/.ssh/id_rsa.pub ./config/ssh_key.pub
 	```
-10. Try running the app locally: `mix phoenix.server`
-11. Stop the server (control-c; control-c)
-12. Build the docker image: `docker build --tag=elixir-build -f docker/Dockerfile .`
-13. Run the docker image: `docker run -d -p 22:22 -P --name elixir-build elixir-build`
-14. Check that you can ssh into the docker image: `ssh localhost`
-15. You should also check that you can ssh into the Production Host Server
-16. Build a release for production: `mix edeliver build release`
-17. Deploy the build to the Production Host: `mix edeliver deploy release to production`
+10. Set up your local database: `mix ecto.setup`
+11. Try running the app locally: `mix phoenix.server`
+12. Stop the server (control-c; control-c)
+13. Build the docker image: `docker build --tag=elixir-build -f docker/Dockerfile .`
+14. Run the docker image: `docker run -d -p 22:22 -P --name elixir-build elixir-build`
+15. Check that you can ssh into the docker image: `ssh localhost`
+16. You should also check that you can ssh into the Production Host Server
+17. Build a release for production: `mix edeliver build release`
+18. Deploy the build to the Production Host: `mix edeliver deploy release to production`
 	* Note: If you are presented with multiple releases, you need to type the version number of the release that you want to deploy then press [return]
 	
 		```
